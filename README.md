@@ -5,8 +5,11 @@ This is the first MVP: local editing only (no GitHub, backend or auth yet).
 
 ```bash
 npm install
-npm run dev        # editor at http://localhost:5173, the plain site at /?site
+npm run dev          # editor at http://localhost:5173, the plain site at /?site
+npm run build:pages  # website only, as deployed to GitHub Pages
 ```
+
+The website is deployed to GitHub Pages by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main`.
 
 ## Making content editable
 
