@@ -1,14 +1,12 @@
 import { useRef, type ChangeEvent } from 'react';
 import type { SaveStatus } from '../cms/cmsStore';
+import { useEditorStore } from './editorStore';
+import { buttonClass, pill } from './ui';
 
 interface ToolbarProps {
   siteName: string;
   pageLabel: string;
   changeCount: number;
-  saveStatus: SaveStatus;
-  notice: string | null;
-  previewing: boolean;
-  onTogglePreview: () => void;
   onExport: () => void;
   onImport: (file: File) => void;
   onReset: () => void;
@@ -20,39 +18,51 @@ const STATUS_TEXT: Record<SaveStatus, string> = {
   error: 'Could not save: browser storage is full',
 };
 
-export function Toolbar(props: ToolbarProps) {
+const STATUS_DOT: Record<SaveStatus, string> = {
+  saved: 'bg-secondary',
+  saving: 'bg-secondary animate-pulse',
+  error: 'bg-danger',
+};
+
+export function Toolbar({ siteName, pageLabel, changeCount, onExport, onImport, onReset }: ToolbarProps) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const saveStatus = useEditorStore((s) => s.saveStatus);
+  const notice = useEditorStore((s) => s.notice);
+  const previewing = useEditorStore((s) => s.previewing);
+  const togglePreview = useEditorStore((s) => s.togglePreview);
 
   const pickFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
-    if (file) props.onImport(file);
+    if (file) onImport(file);
   };
 
   return (
-    <header className="cms-toolbar">
-      <div className="cms-toolbar-title">
-        <span className="cms-logo">
-          <span className="cms-logo-mark" aria-hidden="true">/</span>
+    <header className="grid h-14 grid-cols-[1fr_auto] items-center gap-4 border-b border-line bg-surface px-5 min-[1100px]:grid-cols-[1fr_auto_1fr]">
+      <div className="flex min-w-0 items-center gap-5">
+        <span className="flex items-center gap-1 text-h3 tracking-tight">
+          <span className="flex size-6 items-center justify-center rounded-[2px] bg-primary font-mono text-code text-white" aria-hidden="true">
+            /
+          </span>
           CMSify
         </span>
-        <span className="cms-pill cms-toolbar-site">
-          <span className="cms-faint">site:</span>
-          <strong>{props.siteName}</strong>
-          <span className="cms-faint">/{props.pageLabel.toLowerCase()}</span>
+        <span className={pill}>
+          <span className="select-none text-faint">site:</span>
+          <strong className="truncate font-medium text-ink">{siteName}</strong>
+          <span className="select-none text-faint">/{pageLabel.toLowerCase()}</span>
         </span>
       </div>
 
-      <div className="cms-pill cms-toolbar-status" role="status">
-        {props.notice ?? (
+      <div className={`${pill} max-[1099px]:hidden`} role="status">
+        {notice ?? (
           <>
-            <span className={`cms-dot cms-dot--${props.saveStatus}`} />
-            <span className="cms-toolbar-status-text">{STATUS_TEXT[props.saveStatus]}</span>
-            {props.changeCount > 0 && (
+            <span className={`size-1.5 flex-none rounded-full ${STATUS_DOT[saveStatus]}`} />
+            <span className="text-ink">{STATUS_TEXT[saveStatus]}</span>
+            {changeCount > 0 && (
               <>
-                <span className="cms-faint">|</span>
-                <span className="cms-accent">
-                  {props.changeCount} change{props.changeCount === 1 ? '' : 's'}
+                <span className="select-none text-faint">|</span>
+                <span className="text-secondary">
+                  {changeCount} change{changeCount === 1 ? '' : 's'}
                 </span>
               </>
             )}
@@ -60,19 +70,19 @@ export function Toolbar(props: ToolbarProps) {
         )}
       </div>
 
-      <div className="cms-toolbar-actions">
-        <button type="button" className="cms-button cms-button--quiet" onClick={props.onReset} disabled={props.changeCount === 0}>
+      <div className="flex items-center justify-end gap-1">
+        <button type="button" className={buttonClass('quiet')} onClick={onReset} disabled={changeCount === 0}>
           Reset changes
         </button>
-        <button type="button" className="cms-button cms-button--quiet" onClick={() => fileInput.current?.click()}>
+        <button type="button" className={buttonClass('quiet')} onClick={() => fileInput.current?.click()}>
           Import JSON
         </button>
         <input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={pickFile} />
-        <button type="button" className="cms-button cms-button--quiet" onClick={props.onExport}>
+        <button type="button" className={buttonClass('quiet')} onClick={onExport}>
           Export JSON
         </button>
-        <button type="button" className="cms-button cms-button--primary" onClick={props.onTogglePreview} aria-pressed={props.previewing}>
-          {props.previewing ? 'Back to editing' : 'Preview'}
+        <button type="button" className={buttonClass('primary')} onClick={togglePreview} aria-pressed={previewing}>
+          {previewing ? 'Back to editing' : 'Preview'}
         </button>
       </div>
     </header>

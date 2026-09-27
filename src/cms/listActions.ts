@@ -4,12 +4,12 @@ import { resolveValue, type CMSContent, type CMSEntry, type CMSValue } from './c
 /* Structural edits on repeated blocks. They only touch content: item order plus field overrides. */
 
 export function resolveEntry({ store }: CMSRuntime, entry: CMSEntry): CMSValue {
-  return resolveValue(entry.type, store.get(entry.id), entry.defaultValue);
+  return resolveValue(entry.type, store.getState().content[entry.id], entry.defaultValue);
 }
 
 export function getListOrder(runtime: CMSRuntime, listId: string): string[] {
   const entry = runtime.registry.get(listId);
-  return entry?.type === 'list' ? resolveValue('list', runtime.store.get(listId), entry.defaultValue) : [];
+  return entry?.type === 'list' ? resolveValue('list', runtime.store.getState().content[listId], entry.defaultValue) : [];
 }
 
 function newKey() {
@@ -30,12 +30,12 @@ export function moveItem(runtime: CMSRuntime, listId: string, key: string, delta
   if (from < 0 || to < 0 || to >= order.length) return;
   const next = [...order];
   [next[from], next[to]] = [next[to], next[from]];
-  runtime.store.set(listId, next);
+  runtime.store.getState().set(listId, next);
 }
 
 export function removeItem(runtime: CMSRuntime, listId: string, key: string) {
   const order = getListOrder(runtime, listId);
-  runtime.store.transaction((draft) => {
+  runtime.store.getState().transaction((draft) => {
     draft[listId] = order.filter((k) => k !== key);
     withoutItemOverrides(draft, listId, key);
   });
@@ -46,7 +46,7 @@ export function addItem(runtime: CMSRuntime, listId: string, afterKey?: string):
   const order = getListOrder(runtime, listId);
   const key = newKey();
   const index = afterKey && order.includes(afterKey) ? order.indexOf(afterKey) + 1 : order.length;
-  runtime.store.set(listId, [...order.slice(0, index), key, ...order.slice(index)]);
+  runtime.store.getState().set(listId, [...order.slice(0, index), key, ...order.slice(index)]);
   return key;
 }
 
@@ -58,7 +58,7 @@ export function duplicateItem(runtime: CMSRuntime, listId: string, key: string):
   const target = `${listId}.${copy}`;
   const index = order.indexOf(key) + 1;
 
-  runtime.store.transaction((draft) => {
+  runtime.store.getState().transaction((draft) => {
     draft[listId] = [...order.slice(0, index), copy, ...order.slice(index)];
     for (const entry of runtime.registry.descendants(source)) {
       draft[target + entry.id.slice(source.length)] = resolveEntry(runtime, entry);

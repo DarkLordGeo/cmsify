@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 /** `--mode pages` builds only the website (src/site.tsx) for GitHub Pages, served under /cmsify/. */
 function siteEntry(): Plugin {
@@ -17,5 +18,5 @@ function siteEntry(): Plugin {
 
 export default defineConfig(({ mode }) => ({
   base: mode === 'pages' ? '/cmsify/' : '/',
-  plugins: [react(), mode === 'pages' && siteEntry()],
+  plugins: [react(), tailwindcss(), mode === 'pages' && siteEntry()],
 }));

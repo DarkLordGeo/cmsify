@@ -20,8 +20,11 @@ type ContentNode = string | ContentTree | ContentNode[];
  * current value. This yields exactly the content the site shows, across all pages,
  * including items added in the editor and excluding removed ones.
  */
-export function collectContent(config: CMSSiteConfig, store: CMSStore): CMSResolvedEntry[] {
+export function collectContent(config: CMSSiteConfig, source: CMSStore): CMSResolvedEntry[] {
   const registry = createCMSRegistry();
+  // A server render reads each store's initial state, so render from a snapshot of the current content.
+  const { content } = source.getState();
+  const store = createCMSStore(content);
   const pages = config.pages.map((page) => createElement(page.component, { key: page.id }));
 
   renderToStaticMarkup(
@@ -34,7 +37,7 @@ export function collectContent(config: CMSSiteConfig, store: CMSStore): CMSResol
 
   return registry
     .entries()
-    .map((entry) => ({ id: entry.id, type: entry.type, value: resolveValue(entry.type, store.get(entry.id), entry.defaultValue) }) as CMSResolvedEntry)
+    .map((entry) => ({ id: entry.id, type: entry.type, value: resolveValue(entry.type, content[entry.id], entry.defaultValue) }) as CMSResolvedEntry)
     .sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
 }
 

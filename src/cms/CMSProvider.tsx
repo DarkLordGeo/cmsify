@@ -1,11 +1,13 @@
-import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { useStore } from 'zustand';
 import type { CMSRegistry } from './cmsRegistry';
-import type { CMSStore } from './cmsStore';
+import { createCMSStore, type CMSStore } from './cmsStore';
 import {
   resolveValue,
   type CMSEntry,
   type CMSFieldOptions,
   type CMSFieldType,
+  type CMSValue,
   type CMSValueMap,
 } from './cmsTypes';
 
@@ -27,7 +29,8 @@ export function useCMSRuntime(): CMSRuntime {
   return runtime;
 }
 
-const noopSubscribe = () => () => {};
+/** Used when there is no provider: never changes, so every element shows its default. */
+const emptyStore = createCMSStore();
 
 /**
  * Binds an element to the CMS: registers its metadata and returns the current value.
@@ -42,13 +45,16 @@ export function useCMSValue<T extends CMSFieldType>(
   const runtime = useContext(CMSRuntimeContext);
   runtime?.registry.register({ id, type, defaultValue, options } as CMSEntry);
 
-  const getSnapshot = () => runtime?.store.get(id);
-  const override = useSyncExternalStore(runtime?.store.subscribe ?? noopSubscribe, getSnapshot, getSnapshot);
+  const override = useStore(runtime?.store ?? emptyStore, (s) => s.content[id]);
   return resolveValue(type, override, defaultValue);
+}
+
+/** The override stored for one id, if any. */
+export function useCMSOverride(id: string): CMSValue | undefined {
+  return useStore(useCMSRuntime().store, (s) => s.content[id]);
 }
 
 /** All current overrides. */
 export function useCMSContent() {
-  const { store } = useCMSRuntime();
-  return useSyncExternalStore(store.subscribe, store.getContent, store.getContent);
+  return useStore(useCMSRuntime().store, (s) => s.content);
 }

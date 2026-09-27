@@ -39,7 +39,7 @@ Register the site's layout and pages in [`src/cms.config.ts`](src/cms.config.ts)
 ```
 src/cms/        runtime, independent of the website
   cmsTypes.ts      content value types, metadata, DOM attribute contract
-  cmsStore.ts      content overrides (flat id → value) + localStorage persistence
+  cmsStore.ts      Zustand store of content overrides (flat id → value), persisted to localStorage
   cmsRegistry.ts   metadata that elements declare while rendering (type, default value)
   CMSProvider.tsx  context + useCMSValue(): the binding between an element and the store
   EditableElement.tsx  EditableText / Image / Link / List
@@ -47,7 +47,8 @@ src/cms/        runtime, independent of the website
   PreviewFrame.tsx renders the site in an iframe (real viewport) through a React portal
   listActions.ts   add / remove / duplicate / reorder repeated items
   exporters.ts     flat ids ⇄ hierarchical JSON
-src/editor/     editor UI (toolbar, page list, inspector)
+src/editor/     editor UI (toolbar, page list, inspector); editorStore.ts holds session state (Zustand)
+src/index.css    Tailwind v4 entry with the shared design tokens (@theme)
 src/website/    the website being edited (CMSify landing page)
 ```
 

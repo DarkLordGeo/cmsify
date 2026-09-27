@@ -1,17 +1,9 @@
 import { EditableLink, EditableList, EditableText } from '../cms';
 import { benefits, ctaNotes, demoNav, flow, steps } from './content';
+import { button, code, container, Dot, eyebrow, GitHubIcon, narrowContainer, pill, separated } from './ui';
 
-function GitHubIcon() {
-  return (
-    <svg aria-hidden="true" className="s-github" viewBox="0 0 24 24">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-      />
-    </svg>
-  );
-}
+const section = 'border-b border-line py-24';
+const card = 'flex flex-col rounded-[18px] border border-line bg-surface-bright p-5 transition-colors hover:border-secondary md:p-8';
 
 export function Home() {
   return (
@@ -28,33 +20,42 @@ export function Home() {
 
 function Hero() {
   return (
-    <section className="s-section s-hero">
-      <div className="s-container s-container--narrow s-hero-inner">
-        <div className="s-pill s-hero-badge">
-          <span className="s-dot s-dot--pulse" />
+    <section className="border-b border-line bg-surface py-20">
+      <div className={`${narrowContainer} flex flex-col items-center text-center`}>
+        <div className={`${pill} mb-5 gap-1 bg-surface-low px-3 py-1 text-ink-variant`}>
+          <Dot pulse />
           <EditableText cmsId="home.hero.badge">In-place runtime content layer</EditableText>
         </div>
-        <EditableText cmsId="home.hero.title" as="h1" className="s-hero-title">
+        <EditableText
+          cmsId="home.hero.title"
+          as="h1"
+          className="mb-5 max-w-3xl text-[44px]/12 font-semibold tracking-tight md:text-[58px]/16"
+        >
           Turn your website into a CMS.
         </EditableText>
-        <EditableText cmsId="home.hero.description" as="p" className="s-hero-text" multiline>
+        <EditableText cmsId="home.hero.description" as="p" className="mb-8 max-w-2xl text-body-lg text-ink-variant" multiline>
           Connect your GitHub repository and edit your existing website visually — without rebuilding it.
         </EditableText>
-        <div className="s-hero-actions">
-          <EditableLink cmsId="home.hero.primaryCta" href="#" className="s-button" before={<GitHubIcon />}>
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <EditableLink cmsId="home.hero.primaryCta" href="#" className={`${button} w-full gap-1 sm:w-auto`} before={<GitHubIcon />}>
             Connect GitHub
           </EditableLink>
-          <EditableLink cmsId="home.hero.secondaryCta" href="#how-it-works" className="s-text-link" after={<span className="s-arrow">→</span>}>
+          <EditableLink
+            cmsId="home.hero.secondaryCta"
+            href="#how-it-works"
+            className="group inline-flex h-11 items-center gap-1 px-5 font-medium transition-colors hover:text-secondary"
+            after={<span className="transition-transform group-hover:translate-x-0.5">→</span>}
+          >
             See how it works
           </EditableLink>
         </div>
-        <div className="s-pill s-terminal">
-          <span className="s-muted-2">$</span>
-          <EditableText cmsId="home.hero.command" className="s-strong">
+        <div className={`${pill} mt-8 gap-2 bg-surface-low px-3 py-1.5 text-ink-variant`}>
+          <span className="text-muted">$</span>
+          <EditableText cmsId="home.hero.command" className="font-medium text-ink">
             npx @cmsify/scan ./my-app
           </EditableText>
-          <span className="s-faint">→</span>
-          <EditableText cmsId="home.hero.commandResult" className="s-accent">
+          <span className="select-none text-faint">→</span>
+          <EditableText cmsId="home.hero.commandResult" className="font-medium text-secondary">
             38 editable tokens detected
           </EditableText>
         </div>
@@ -64,79 +65,83 @@ function Hero() {
 }
 
 function ProductVisual() {
+  const divider = 'border-line/60';
   return (
-    <section className="s-section s-section--bright">
-      <div className="s-container">
-        <div className="s-browser">
-          <div className="s-browser-bar">
-            <div className="s-browser-left">
-              <div className="s-traffic" aria-hidden="true">
-                <span />
-                <span />
-                <span />
+    <section className={`${section} bg-surface-bright`}>
+      <div className={container}>
+        <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-xs">
+          <div className="flex h-12 items-center justify-between border-b border-line bg-surface-low px-5">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1.5" aria-hidden="true">
+                <span className="size-3 rounded-full bg-zinc-300" />
+                <span className="size-3 rounded-full bg-zinc-300" />
+                <span className="size-3 rounded-full bg-zinc-300" />
               </div>
-              <div className="s-pill s-url">
-                <span className="s-icon s-icon--13 s-muted-2">lock</span>
-                <span className="s-variant">https://</span>
-                <EditableText cmsId="home.demo.domain" className="s-strong">
+              <div className={`${pill} min-w-[280px] gap-1 bg-surface px-3 py-1 text-ink`}>
+                <span className="icon text-[13px] text-muted">lock</span>
+                <span className="text-ink-variant">https://</span>
+                <EditableText cmsId="home.demo.domain" className="font-medium">
                   acme-site.com
                 </EditableText>
-                <span className="s-faint">/preview</span>
+                <span className="select-none text-faint">/preview</span>
               </div>
             </div>
-            <div className="s-pill s-live">
-              <span className="s-dot s-dot--small s-dot--pulse" />
-              <span className="s-label-mono s-strong">CMSify</span>
-              <span className="s-faint">|</span>
-              <span className="s-accent">live-edit</span>
+            <div className={`${pill} gap-1 bg-surface px-2 py-1 text-ink-variant`}>
+              <Dot small pulse />
+              <span className="text-label font-medium text-ink">CMSify</span>
+              <span className="select-none text-faint">|</span>
+              <span className="text-secondary">live-edit</span>
             </div>
           </div>
 
-          <div className="s-demo">
-            <div className="s-demo-header">
-              <div className="s-demo-brand">
-                <span className="s-demo-mark">A</span>
+          <div className="flex min-h-[460px] select-none flex-col justify-between bg-surface p-8 md:p-14">
+            <div className={`mb-8 flex items-center justify-between border-b pb-5 ${divider}`}>
+              <div className="flex items-center gap-2 text-h3">
+                <span className="flex size-6 items-center justify-center rounded-[2px] bg-ink font-mono text-[11px]/[14px] font-bold text-surface">A</span>
                 <EditableText cmsId="home.demo.brand">Acme Studio</EditableText>
               </div>
-              <EditableList cmsId="home.demo.nav" className="s-demo-nav" items={demoNav} template={{ id: 'new', text: 'Link' }}>
+              <EditableList cmsId="home.demo.nav" className="hidden items-center gap-5 text-ink-variant md:flex" items={demoNav} template={{ id: 'new', text: 'Link' }}>
                 {(item, field) => <EditableText cmsId={field('text')}>{item.text}</EditableText>}
               </EditableList>
-              <div className="s-code s-muted-2">
-                branch: <EditableText cmsId="home.demo.branch" className="s-strong">main</EditableText>
+              <div className={`${code} text-muted`}>
+                branch: <EditableText cmsId="home.demo.branch" className="text-ink">main</EditableText>
               </div>
             </div>
 
-            <div className="s-demo-body">
-              <div className="s-demo-highlight">
-                <div className="s-demo-outline" aria-hidden="true" />
-                <div className="s-demo-tag" aria-hidden="true">
-                  <span className="s-dot s-dot--small" />
+            <div className="my-auto max-w-2xl py-3">
+              <div className="relative my-2 inline-block">
+                <div className="pointer-events-none absolute -inset-2.5 rounded-[10px] border-2 border-secondary bg-secondary/5" aria-hidden="true" />
+                <div
+                  className={`absolute -top-7 left-0 flex items-center gap-1.5 rounded-[12px] border border-secondary bg-surface px-2 py-0.5 ${code} text-secondary shadow-xs`}
+                  aria-hidden="true"
+                >
+                  <Dot small />
                   <span>hero.title</span>
-                  <span className="s-icon s-icon--12">edit</span>
+                  <span className="icon ml-0.5 text-[12px]">edit</span>
                 </div>
-                <h2 className="s-demo-title">
+                <h2 className="relative text-[30px]/9 font-semibold tracking-tight md:text-[48px]/none">
                   <EditableText cmsId="home.demo.title">Build better software.</EditableText>
-                  <span className="s-caret" aria-hidden="true" />
+                  <span className="ml-0.5 inline-block h-8 w-0.5 animate-pulse bg-secondary align-middle md:h-11" aria-hidden="true" />
                 </h2>
               </div>
-              <EditableText cmsId="home.demo.description" as="p" className="s-demo-text">
+              <EditableText cmsId="home.demo.description" as="p" className="mt-3 mb-5 max-w-lg text-body-lg text-ink-variant">
                 We help teams build modern digital products.
               </EditableText>
-              <div className="s-demo-actions">
-                <EditableText cmsId="home.demo.button" className="s-demo-button">
+              <div className="flex items-center gap-3">
+                <EditableText cmsId="home.demo.button" className="inline-flex h-10 items-center rounded-[12px] bg-ink px-5 font-medium text-surface shadow-xs">
                   Get started
                 </EditableText>
-                <EditableText cmsId="home.demo.caption" className="s-code s-muted-2">
+                <EditableText cmsId="home.demo.caption" className={`${code} text-muted`}>
                   ← Visual edits sync directly to Git commits
                 </EditableText>
               </div>
             </div>
 
-            <div className="s-demo-footer">
-              <EditableText cmsId="home.demo.copyright" className="s-code">
+            <div className={`flex items-center justify-between border-t pt-5 text-muted ${divider}`}>
+              <EditableText cmsId="home.demo.copyright" className={code}>
                 © 2026 Acme Corp.
               </EditableText>
-              <EditableText cmsId="home.demo.status" className="s-code s-accent s-medium">
+              <EditableText cmsId="home.demo.status" className={`${code} font-medium text-secondary`}>
                 Auto-sync ready
               </EditableText>
             </div>
@@ -147,13 +152,13 @@ function ProductVisual() {
   );
 }
 
-function SectionHeading({ id, eyebrow, heading, large }: { id: string; eyebrow: string; heading: string; large?: boolean }) {
+function SectionHeading({ id, eyebrow: label, heading, large }: { id: string; eyebrow: string; heading: string; large?: boolean }) {
   return (
     <>
-      <EditableText cmsId={`${id}.eyebrow`} className="s-eyebrow">
-        {eyebrow}
+      <EditableText cmsId={`${id}.eyebrow`} className={eyebrow}>
+        {label}
       </EditableText>
-      <EditableText cmsId={`${id}.heading`} as="h2" className={large ? 's-h2 s-h2--xl' : 's-h2'}>
+      <EditableText cmsId={`${id}.heading`} as="h2" className={large ? 'mt-1 mb-2 text-[32px]/10 font-semibold tracking-tight' : 'mt-1 text-h2'}>
         {heading}
       </EditableText>
     </>
@@ -162,31 +167,35 @@ function SectionHeading({ id, eyebrow, heading, large }: { id: string; eyebrow: 
 
 function HowItWorks() {
   return (
-    <section className="s-section" id="how-it-works">
-      <div className="s-container">
-        <div className="s-section-head">
+    <section className={`${section} bg-surface`} id="how-it-works">
+      <div className={container}>
+        <div className="mb-8">
           <SectionHeading id="home.howItWorks" eyebrow="WORKFLOW" heading="How it works" />
         </div>
         <EditableList
           cmsId="home.howItWorks.steps"
-          className="s-grid s-grid--3"
+          className="grid grid-cols-1 gap-5 md:grid-cols-3"
           items={steps}
           template={{ id: 'new', label: 'STEP', icon: 'bolt', title: 'New step', description: 'Describe this step.' }}
         >
           {(step, field) => (
-            <div className="s-card">
-              <div className="s-card-top">
-                <EditableText cmsId={field('label')} className="s-label-mono s-accent s-semibold">
+            <div className={card}>
+              <div className="mb-5 flex items-center justify-between">
+                <EditableText cmsId={field('label')} className="font-mono text-label font-semibold text-secondary">
                   {step.label}
                 </EditableText>
-                <EditableText cmsId={field('icon')} className={`s-icon s-icon--20 ${step.accent ? 's-accent' : 's-muted-2'}`} label="Icon (Material Symbols name)">
+                <EditableText
+                  cmsId={field('icon')}
+                  className={`icon text-[20px] ${step.accent ? 'text-secondary' : 'text-muted'}`}
+                  label="Icon (Material Symbols name)"
+                >
                   {step.icon}
                 </EditableText>
               </div>
-              <EditableText cmsId={field('title')} as="h3" className="s-h3">
+              <EditableText cmsId={field('title')} as="h3" className="mb-2 text-h3">
                 {step.title}
               </EditableText>
-              <EditableText cmsId={field('description')} as="p" className="s-card-text" multiline>
+              <EditableText cmsId={field('description')} as="p" className="leading-relaxed text-ink-variant" multiline>
                 {step.description}
               </EditableText>
             </div>
@@ -198,43 +207,46 @@ function HowItWorks() {
 }
 
 function Architecture() {
+  // Each item is a node plus the arrow to the next one. Position-based accents mirror the design:
+  // the second stage and the final stage are highlighted, as is the arrow leading into the final stage.
+  const accent = 'group-nth-2/flow:text-secondary group-last/flow:text-secondary';
   return (
-    <section className="s-section s-section--bright">
-      <div className="s-container">
-        <div className="s-section-head s-section-head--intro">
+    <section className={`${section} bg-surface-bright`}>
+      <div className={container}>
+        <div className="mb-8 max-w-2xl">
           <SectionHeading id="home.architecture" eyebrow="ARCHITECTURE & DATA FLOW" heading="Your website stays yours." large />
-          <EditableText cmsId="home.architecture.description" as="p" className="s-body-lg s-variant" multiline>
+          <EditableText cmsId="home.architecture.description" as="p" className="text-body-lg text-ink-variant" multiline>
             CMSify works with your existing codebase. Your content stays versioned in Git while your existing deployment continues to work.
           </EditableText>
         </div>
-        <div className="s-panel">
+        <div className="rounded-[20px] border border-line bg-surface p-5 shadow-xs md:p-10">
           <EditableList
             cmsId="home.architecture.flow"
-            className="s-flow"
+            className="grid grid-cols-1 gap-3 md:grid-cols-2"
             items={flow}
             template={{ id: 'new', label: '05 / STEP', icon: 'bolt', title: 'New stage', detail: 'details' }}
           >
             {(node, field) => (
-              <div className="s-flow-item">
-                <div className="s-flow-node">
-                  <div className="s-flow-top">
-                    <EditableText cmsId={field('label')} className="s-label-mono s-flow-label">
+              <div className="group/flow grid grid-cols-1 items-center gap-3 md:grid-cols-2">
+                <div className="flex min-w-0 flex-col gap-1 rounded-[14px] border border-line bg-surface-low p-3 group-last/flow:border-secondary group-last/flow:bg-secondary-soft">
+                  <div className="mb-1 flex items-center justify-between">
+                    <EditableText cmsId={field('label')} className={`font-mono text-label text-muted group-last/flow:font-semibold ${accent}`}>
                       {node.label}
                     </EditableText>
-                    <EditableText cmsId={field('icon')} className="s-icon s-icon--18 s-flow-icon" label="Icon (Material Symbols name)">
+                    <EditableText cmsId={field('icon')} className={`icon text-[18px] text-ink-variant ${accent}`} label="Icon (Material Symbols name)">
                       {node.icon}
                     </EditableText>
                   </div>
-                  <EditableText cmsId={field('title')} className="s-flow-title">
+                  <EditableText cmsId={field('title')} className="text-[15px]/5 font-semibold">
                     {node.title}
                   </EditableText>
-                  <EditableText cmsId={field('detail')} className="s-code s-flow-detail">
+                  <EditableText cmsId={field('detail')} className={`truncate ${code} text-ink-variant group-last/flow:text-secondary`}>
                     {node.detail}
                   </EditableText>
                 </div>
-                <div className="s-flow-arrow" aria-hidden="true">
-                  <span className="s-flow-line" />
-                  <span className="s-flow-head">→</span>
+                <div className="hidden items-center md:flex md:group-last/flow:invisible" aria-hidden="true">
+                  <span className="h-px flex-1 bg-line group-nth-last-2/flow:bg-secondary" />
+                  <span className="-mx-1 font-mono text-[13px]/4 font-medium text-muted group-nth-last-2/flow:text-secondary">→</span>
                 </div>
               </div>
             )}
@@ -247,26 +259,26 @@ function Architecture() {
 
 function Benefits() {
   return (
-    <section className="s-section">
-      <div className="s-container">
-        <div className="s-section-head">
+    <section className={`${section} bg-surface`}>
+      <div className={container}>
+        <div className="mb-8">
           <SectionHeading id="home.benefits" eyebrow="BENEFITS" heading="Key benefits" />
         </div>
         <EditableList
           cmsId="home.benefits.items"
-          className="s-grid s-grid--2"
+          className="grid grid-cols-1 gap-5 md:grid-cols-2"
           items={benefits}
           template={{ id: 'new', label: '05 / NEW', title: 'New benefit', description: 'Describe the benefit.' }}
         >
           {(benefit, field) => (
-            <div className="s-card">
-              <EditableText cmsId={field('label')} className={`s-label-mono s-card-label ${benefit.accent ? 's-accent' : 's-muted-2'}`}>
+            <div className={card}>
+              <EditableText cmsId={field('label')} className={`mb-2 block font-mono text-label ${benefit.accent ? 'text-secondary' : 'text-muted'}`}>
                 {benefit.label}
               </EditableText>
-              <EditableText cmsId={field('title')} as="h3" className="s-h3 s-h3--tight">
+              <EditableText cmsId={field('title')} as="h3" className="mb-1 text-h3">
                 {benefit.title}
               </EditableText>
-              <EditableText cmsId={field('description')} as="p" className="s-card-text" multiline>
+              <EditableText cmsId={field('description')} as="p" className="leading-relaxed text-ink-variant" multiline>
                 {benefit.description}
               </EditableText>
             </div>
@@ -279,22 +291,27 @@ function Benefits() {
 
 function FinalCta() {
   return (
-    <section className="s-section s-section--last">
-      <div className="s-container s-container--narrow">
-        <div className="s-cta">
-          <EditableText cmsId="home.cta.eyebrow" className="s-eyebrow">
+    <section className="bg-surface py-24">
+      <div className={narrowContainer}>
+        <div className="flex flex-col items-center rounded-3xl border border-line bg-surface-bright p-8 text-center shadow-xs md:p-14">
+          <EditableText cmsId="home.cta.eyebrow" className={`${eyebrow} mb-2 block`}>
             INITIALIZE REPOSITORY
           </EditableText>
-          <EditableText cmsId="home.cta.heading" as="h2" className="s-cta-title">
+          <EditableText cmsId="home.cta.heading" as="h2" className="mb-2 max-w-xl text-h2 tracking-tight md:text-[36px]/10">
             Your website is already built. Now make it editable.
           </EditableText>
-          <EditableText cmsId="home.cta.description" as="p" className="s-cta-text" multiline>
+          <EditableText cmsId="home.cta.description" as="p" className="mb-8 max-w-md leading-relaxed text-ink-variant" multiline>
             Connect a GitHub repository and start turning your website into a CMS.
           </EditableText>
-          <EditableLink cmsId="home.cta.button" href="#" className="s-button" before={<GitHubIcon />}>
+          <EditableLink cmsId="home.cta.button" href="#" className={`${button} gap-2`} before={<GitHubIcon />}>
             Connect GitHub
           </EditableLink>
-          <EditableList cmsId="home.cta.notes" className="s-cta-notes" items={ctaNotes} template={{ id: 'new', text: 'New note' }}>
+          <EditableList
+            cmsId="home.cta.notes"
+            className={`mt-5 flex items-center justify-center gap-3 whitespace-nowrap ${code} text-muted ${separated} [&>*+*]:before:mr-3`}
+            items={ctaNotes}
+            template={{ id: 'new', text: 'New note' }}
+          >
             {(note, field) => <EditableText cmsId={field('text')}>{note.text}</EditableText>}
           </EditableList>
         </div>

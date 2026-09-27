@@ -66,7 +66,7 @@ export function CMSOverlay({ enabled, selection, onSelect, children }: CMSOverla
   return (
     <div
       ref={rootRef}
-      className="cms-overlay-root"
+      className="relative min-h-full [&>:first-child]:min-h-full"
       onPointerMove={enabled ? (e) => setHovered(targetOf(e.target)) : undefined}
       onPointerLeave={() => setHovered(null)}
       onClickCapture={
@@ -83,35 +83,37 @@ export function CMSOverlay({ enabled, selection, onSelect, children }: CMSOverla
     >
       {children}
       {enabled && (
-        <div className="cms-overlay-layer" aria-hidden="true">
-          {boxes.item && <div className="cms-box cms-box--item" style={boxes.item} />}
-          {boxes.hover && hovered && (
-            <div className={boxClass('hover', boxes.hover)} style={boxes.hover}>
-              <span className="cms-box-label">
-                <span className="cms-box-dot" />
-                {hovered.getAttribute(CMS_ATTR.id)}
-              </span>
-            </div>
-          )}
-          {boxes.selected && selection && (
-            <div className={boxClass('selected', boxes.selected)} style={boxes.selected}>
-              <span className="cms-box-label">
-                <span className="cms-box-dot" />
-                {selection.id}
-              </span>
-            </div>
-          )}
+        <div className="pointer-events-none absolute inset-0 z-2147483000" aria-hidden="true">
+          {boxes.item && <div className={BOX_STYLES.item} style={boxes.item} />}
+          {boxes.hover && hovered && <LabeledBox kind="hover" box={boxes.hover} id={hovered.getAttribute(CMS_ATTR.id)} />}
+          {boxes.selected && selection && <LabeledBox kind="selected" box={boxes.selected} id={selection.id} />}
         </div>
       )}
     </div>
   );
 }
 
+const BOX_STYLES = {
+  hover: 'absolute rounded-md bg-secondary/4 outline-[1.5px] outline-offset-4 outline-secondary outline-dashed',
+  selected: 'absolute rounded-md bg-secondary/5 outline-2 outline-offset-[6px] outline-secondary',
+  item: 'absolute rounded-[10px] outline-1 outline-offset-[10px] outline-secondary/45 outline-dashed',
+};
+
 const LABEL_SPACE = 24;
 
-/** Labels sit above the element, or below it when there is no room at the top of the page. */
-function boxClass(kind: 'hover' | 'selected', box: Box) {
-  return `cms-box cms-box--${kind}${box.top < LABEL_SPACE ? ' cms-box--label-below' : ''}`;
+function LabeledBox({ kind, box, id }: { kind: 'hover' | 'selected'; box: Box; id: string | null }) {
+  // Labels sit above the element, or below it when there is no room at the top of the page.
+  const position = box.top < LABEL_SPACE ? 'top-[calc(100%+10px)]' : 'bottom-[calc(100%+10px)]';
+  return (
+    <div className={BOX_STYLES[kind]} style={box}>
+      <span
+        className={`absolute -left-1.5 flex items-center gap-1.5 whitespace-nowrap rounded-[12px] border border-secondary bg-white px-2 py-0.5 font-mono text-code text-secondary shadow-xs ${position} ${kind === 'hover' ? 'border-dashed' : ''}`}
+      >
+        <span className="size-1.5 rounded-full bg-secondary" />
+        {id}
+      </span>
+    </div>
+  );
 }
 
 function toSelection(element: HTMLElement | null): CMSSelection | null {

@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+/* Design tokens shared by the website and the CMSify editor.
+   Fonts (Geist, JetBrains Mono, Material Symbols) are loaded in index.html. */
+@theme {
+  --font-sans: Geist, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-surface: #ffffff;
+  --color-surface-bright: #fbf8ff;
+  --color-surface-low: #f4f2fd;
+  --color-line: #e3e1ec;
+  --color-ink: #1a1b22;
+  --color-ink-variant: #47464a;
+  --color-muted: #78767b;
+  --color-faint: #c8c5ca;
+  --color-primary: #000000;
+  --color-primary-hover: #2f3038;
+  --color-secondary: #006398;
+  --color-secondary-soft: #f0f9ff;
+  --color-danger: #ba1a1a;
+  --color-danger-soft: #ffdad6;
+
+  --text-body: 13px;
+  --text-body--line-height: 20px;
+  --text-body--letter-spacing: -0.005em;
+  --text-body-lg: 15px;
+  --text-body-lg--line-height: 1.625;
+  --text-body-lg--letter-spacing: -0.01em;
+  --text-ui: 12px;
+  --text-ui--line-height: 16px;
+  --text-ui--letter-spacing: 0;
+  --text-code: 11px;
+  --text-code--line-height: 16px;
+  --text-code--letter-spacing: 0;
+  --text-code--font-weight: 500;
+  --text-label: 11px;
+  --text-label--line-height: 14px;
+  --text-label--letter-spacing: 0.04em;
+  --text-label--font-weight: 500;
+  --text-h3: 18px;
+  --text-h3--line-height: 26px;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h3--font-weight: 600;
+  --text-h2: 24px;
+  --text-h2--line-height: 32px;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 600;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-surface font-sans text-body text-ink antialiased;
+  }
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Material Symbols ligature icons; pair with a text-[size] utility. */
+@utility icon {
+  display: inline-block;
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+}

@@ -1,38 +1,44 @@
 import { useEffect, useRef, type ReactNode, type RefObject } from 'react';
 import { EditableLink, EditableList, EditableText } from '../cms';
 import { navLinks } from './content';
-import './site.css';
+import { code, separated } from './ui';
+
+const navLink = 'text-ui font-medium text-ink-variant transition-colors hover:text-ink';
 
 export function Layout({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
   useAnchorScrolling(rootRef);
 
   return (
-    <div className="site" ref={rootRef}>
-      <header className="s-header">
-        <div className="s-header-inner">
-          <div className="s-header-left">
-            <a className="s-brand" href="#">
-              <span className="s-brand-mark">/</span>
+    <div className="min-h-full bg-surface font-sans text-body text-ink antialiased" ref={rootRef}>
+      <header className="sticky top-0 z-50 border-b border-line bg-surface">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-8">
+          <div className="flex items-center gap-5">
+            <a className="flex items-center gap-1 text-h3 tracking-tight" href="#">
+              <span className="flex size-6 items-center justify-center rounded-[2px] bg-primary font-mono text-code text-white">/</span>
               <EditableText cmsId="site.brand">CMSify</EditableText>
             </a>
-            <EditableList cmsId="site.nav" as="nav" className="s-nav" items={navLinks} template={{ id: 'new', text: 'New link', href: '#' }}>
+            <EditableList cmsId="site.nav" as="nav" className="ml-3 hidden items-center gap-6 md:flex" items={navLinks} template={{ id: 'new', text: 'New link', href: '#' }}>
               {(link, field) => (
-                <EditableLink cmsId={field('link')} href={link.href}>
+                <EditableLink cmsId={field('link')} href={link.href} className={navLink}>
                   {link.text}
                 </EditableLink>
               )}
             </EditableList>
           </div>
-          <div className="s-header-right">
-            <EditableLink cmsId="site.signIn" href="#" className="s-signin">
+          <div className="flex items-center gap-3">
+            <EditableLink cmsId="site.signIn" href="#" className={`${navLink} px-2 py-1`}>
               Sign in
             </EditableLink>
-            <EditableLink cmsId="site.connect" href="#" className="s-header-cta">
+            <EditableLink
+              cmsId="site.connect"
+              href="#"
+              className="flex items-center rounded-[12px] border border-primary bg-primary px-3 py-1 text-ui font-medium text-white transition-colors hover:bg-line hover:text-ink"
+            >
               Connect GitHub
             </EditableLink>
-            <div className="s-avatar" aria-hidden="true">
-              <span className="s-icon">person</span>
+            <div className="flex size-8 items-center justify-center rounded-[12px] bg-primary text-white" aria-hidden="true">
+              <span className="icon text-[18px]">person</span>
             </div>
           </div>
         </div>
@@ -40,19 +46,25 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <main>{children}</main>
 
-      <footer className="s-footer">
-        <div className="s-footer-inner">
-          <div className="s-footer-brand">
-            <EditableText cmsId="site.footer.brand" className="s-footer-name">
+      <footer className="border-t border-line bg-surface py-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-8 sm:flex-row">
+          <div className="flex items-center gap-3">
+            <EditableText cmsId="site.footer.brand" className="text-h3">
               CMSify
             </EditableText>
-            <EditableText cmsId="site.footer.copyright" className="s-code">
+            <EditableText cmsId="site.footer.copyright" className={`${code} text-ink-variant`}>
               © 2026 CMSify
             </EditableText>
           </div>
-          <EditableList cmsId="site.footer.links" as="nav" className="s-footer-links" items={navLinks} template={{ id: 'new', text: 'New link', href: '#' }}>
+          <EditableList
+            cmsId="site.footer.links"
+            as="nav"
+            className={`flex items-center gap-4 ${code} ${separated} [&>*+*]:before:mr-4 [&>*+*]:before:text-faint`}
+            items={navLinks}
+            template={{ id: 'new', text: 'New link', href: '#' }}
+          >
             {(link, field) => (
-              <EditableLink cmsId={field('link')} href={link.href}>
+              <EditableLink cmsId={field('link')} href={link.href} className="text-ink-variant transition-colors hover:text-ink">
                 {link.text}
               </EditableLink>
             )}
